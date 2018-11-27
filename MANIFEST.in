@@ -1,0 +1,6 @@
+include LICENSE
+include README.md
+include MANIFEST.in
+include src/os_qdb_protocal/VERSION
+recursive-include tests *.py
+
