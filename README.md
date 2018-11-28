@@ -15,6 +15,41 @@ qdb protocal.
 
 # Usage
 
+* create a protocal object from cmd and key
+
+    ```
+    from os_qdb_protocal import create_protocal
+    proto = create_protocal('get', b'test-key')
+    ```
+
+* use upstream method to generate data to be send
+
+  
+    ```
+    # s is something which used to write data to, like socket, file, etc.
+    for data in proto.upstream(): 
+        s.send(data)
+    ```
+
+* use downstream method to parse data and get size will be recived
+
+    ```
+    downstream = proto.downstream()
+    read_size = next(downstream)
+    while read_size >= 0:
+        # s is something which used to recieve data from, like socket, file, etc.
+        data = s.read(read_size)
+        read_size = downstream.send(data)
+
+    ```
+
+* access key and value
+
+    ```
+    proto.key
+    proto.value
+    ```
+
 
 # Unit Tests
 
