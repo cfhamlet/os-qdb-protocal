@@ -1,11 +1,17 @@
 import struct
 
+INT_SIZE = 4
+
 
 class Protocal(object):
     def __init__(self, cmd, key):
         self._cmd = cmd
         self._key = key
         self._value = None
+
+    @property
+    def cmd(self):
+        return self._cmd
 
     @property
     def key(self):
@@ -23,15 +29,23 @@ class Protocal(object):
 
 
 class Get(Protocal):
+
+    def __init__(self, key):
+        super(Get, self).__init__(1, key)
+
     def upstream(self):
         key_length = len(self._key)
-        return struct.pack('>bi%dsi' % key_length, 1, key_length, self._key, 0)
+        yield struct.pack('>bi%dsi' % key_length, 1, key_length, self._key, 0)
 
     def downstream(self):
-        exist = yield 4
+        exist = yield INT_SIZE
         exist = struct.unpack('>i', exist)[0]
 
         if exist == 0:
-            data_length = yield 4
+            data_length = yield INT_SIZE
             data_length = struct.unpack('>i', data_length)[0]
-            self._value = yield data_length
+            data = yield data_length
+            assert data_length == len(data)
+            self._value = data
+
+        yield -1
