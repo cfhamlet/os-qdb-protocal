@@ -1,26 +1,51 @@
-#!/usr/bin/python 
-
-import socket
 import struct
-from x import docid
 
-def qdb_net_get(s, key, keylen):
-	t = struct.pack('>bi16si', 1, keylen, key, 0)
-	s.send(t)
-	t = s.recv(4)
-	ret = struct.unpack('>i', t)
-	if ret[0] == 0:
-		t = s.recv(4)
-		data_length = struct.unpack('>i', t)[0]
-		return s.recv(data_length)
-		#return struct.unpack('%ds'%data_length, t)
-	else:
-		return None
+INT_SIZE = 4
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(('10.141.108.44', 8012))
 
-url = 'http://www.qq.com/'
-id = docid(url).bytes
-id = id[16:]
-print qdb_net_get(s, id, len(id))
+class Protocal(object):
+    def __init__(self, cmd, key):
+        self._cmd = cmd
+        self._key = key
+        self._value = None
+
+    @property
+    def cmd(self):
+        return self._cmd
+
+    @property
+    def key(self):
+        return self._key
+
+    @property
+    def value(self):
+        return self._value
+
+    def upstream(self):
+        raise NotImplementedError
+
+    def downstream(self, data):
+        raise NotImplementedError
+
+
+class Get(Protocal):
+
+    def __init__(self, key):
+        super(Get, self).__init__(1, key)
+
+    def upstream(self):
+        key_length = len(self._key)
+        yield struct.pack('>bi%dsi' % key_length, 1, key_length, self._key, 0)
+
+    def downstream(self):
+        exist = yield INT_SIZE
+        exist = struct.unpack('>i', exist)[0]
+
+        if exist == 0:
+            data_length = yield INT_SIZE
+            data_length = struct.unpack('>i', data_length)[0]
+            data = yield data_length
+            assert data_length == len(data)
+            self._value = data
+
+        yield -1
