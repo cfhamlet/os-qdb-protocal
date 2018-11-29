@@ -22,7 +22,8 @@ class Protocal(object):
         return self._value
 
     def upstream(self):
-        raise NotImplementedError
+        key_length = len(self._key)
+        yield struct.pack('>bi%dsi' % key_length, self._cmd, key_length, self._key, 0)
 
     def downstream(self, data):
         raise NotImplementedError
@@ -33,9 +34,6 @@ class Get(Protocal):
     def __init__(self, key):
         super(Get, self).__init__(1, key)
 
-    def upstream(self):
-        key_length = len(self._key)
-        yield struct.pack('>bi%dsi' % key_length, 1, key_length, self._key, 0)
 
     def downstream(self):
         exist = yield INT_SIZE
