@@ -40,7 +40,6 @@ qdb protocal.
         # s is something which used to recieve data from, like socket, file, etc.
         data = s.read(read_size)
         read_size = downstream.send(data)
-
     ```
 
 * access key and value
