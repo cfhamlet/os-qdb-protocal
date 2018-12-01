@@ -4,6 +4,8 @@ INT_SIZE = 4
 
 
 class Protocal(object):
+    __slots__ = ('_cmd', '_key', '_value')
+
     def __init__(self, cmd, key):
         self._cmd = cmd
         self._key = key
@@ -33,7 +35,6 @@ class Get(Protocal):
 
     def __init__(self, key):
         super(Get, self).__init__(1, key)
-
 
     def downstream(self):
         exist = yield INT_SIZE
