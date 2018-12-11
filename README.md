@@ -8,7 +8,7 @@
 
 qdb protocal.
 
-Support qdb commands: ``get``, ``test``.
+Support qdb commands: ``get``, ``test``
  
 
 # Install
