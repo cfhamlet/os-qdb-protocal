@@ -6,7 +6,7 @@
 [![PyPI](https://img.shields.io/pypi/v/os-qdb-protocal.svg)](https://pypi.python.org/pypi/os-qdb-protocal)
 
 
-qdb protocal.
+qdb protocal. Support qdb commands: ``get``, ``test``.
  
 
 # Install

@@ -48,3 +48,26 @@ class Get(Protocal):
             self._value = data
 
         yield -1
+
+
+class Test(Protocal):
+
+    def __init__(self, key):
+        super(Test, self).__init__(12, key)
+
+    def downstream(self):
+        exist = yield INT_SIZE
+        exist = struct.unpack('>i', exist)[0]
+
+        if exist == 0:
+            self._value = True
+        elif exist == 1:
+            self._value = False
+        elif exist < 0:
+            errno = yield INT_SIZE
+            errno = struct.unpack('>i', errno)[0]
+            self._value = errno
+        elif exist > 1:
+            self._value = None
+
+        yield -1
