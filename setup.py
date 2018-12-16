@@ -27,7 +27,7 @@ setup(
     author='Ozzy',
     author_email='cfhamlet@gmail.com',
     url='https://github.com/cfhamlet/os-qdb-protocal',
-    install_requires='enum34',
+    install_requires=open('requirements.txt').read().split('\n'),
     zip_safe=False,
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
