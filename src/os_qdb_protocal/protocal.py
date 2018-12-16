@@ -1,6 +1,13 @@
+from enum import Enum, unique
 import struct
 
 INT_SIZE = 4
+
+
+@unique
+class Cmd(Enum):
+    GET = 1
+    TEST = 12
 
 
 class Protocal(object):
@@ -25,7 +32,7 @@ class Protocal(object):
 
     def upstream(self):
         key_length = len(self._key)
-        yield struct.pack('>bi%dsi' % key_length, self._cmd, key_length, self._key, 0)
+        yield struct.pack('>bi%dsi' % key_length, self._cmd.value, key_length, self._key, 0)
 
     def downstream(self, data):
         raise NotImplementedError
@@ -34,7 +41,7 @@ class Protocal(object):
 class Get(Protocal):
 
     def __init__(self, key):
-        super(Get, self).__init__(1, key)
+        super(Get, self).__init__(Cmd.GET, key)
 
     def downstream(self):
         exist = yield INT_SIZE
@@ -53,7 +60,7 @@ class Get(Protocal):
 class Test(Protocal):
 
     def __init__(self, key):
-        super(Test, self).__init__(12, key)
+        super(Test, self).__init__(Cmd.TEST, key)
 
     def downstream(self):
         exist = yield INT_SIZE
