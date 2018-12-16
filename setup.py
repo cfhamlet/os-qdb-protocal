@@ -1,4 +1,6 @@
+import sys
 from setuptools import setup, find_packages
+
 
 
 def read(*filenames, **kwargs):
@@ -25,6 +27,7 @@ setup(
     author='Ozzy',
     author_email='cfhamlet@gmail.com',
     url='https://github.com/cfhamlet/os-qdb-protocal',
+    install_requires='enum34',
     zip_safe=False,
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
