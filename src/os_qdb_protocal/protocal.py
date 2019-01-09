@@ -34,7 +34,7 @@ class Protocal(object):
         key_length = len(self._key)
         yield struct.pack('>bi%dsi' % key_length, self._cmd.value, key_length, self._key, 0)
 
-    def downstream(self, data):
+    def downstream(self):
         raise NotImplementedError
 
 
