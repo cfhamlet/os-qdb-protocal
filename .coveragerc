@@ -7,3 +7,4 @@ source = os_qdb_protocal
 source =
     src/os_qdb_protocal
     .tox/*/lib/python*/site-packages/os_qdb_protocal
+    .tox/*/site-packages/os_qdb_protocal
